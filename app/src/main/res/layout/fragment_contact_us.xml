@@ -1,0 +1,39 @@
+<!-- res/layout/fragment_contact_us.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/button_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email Us"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/primary_color"
+        android:textColor="@android:color/white"
+        android:padding="16dp"/>
+
+    <Button
+        android:id="@+id/button_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Call Us"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/primary_color"
+        android:textColor="@android:color/white"
+        android:padding="16dp"/>
+
+    <Button
+        android:id="@+id/button_instagram"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Instagram"
+        android:backgroundTint="@color/primary_color"
+        android:textColor="@android:color/white"
+        android:padding="16dp"/>
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/Name"
+        android:icon="@drawable/baseline_account_circle_24"
+        android:title="@string/dharmesh_kashyap" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/contact_us"
+        android:icon="@drawable/baseline_contact_page_24"
+        android:title="@string/contact_us" />
+</menu>

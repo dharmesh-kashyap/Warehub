@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashboard"
+        android:icon="@drawable/baseline_space_dashboard_24"
+        android:title="@string/dashboard" />
+    <item
+        android:id="@+id/manageItems"
+        android:icon="@drawable/baseline_inventory_24"
+        android:title="@string/items" />
+    <item
+        android:id="@+id/addProducts"
+        android:icon="@drawable/baseline_add_circle_outline_24"
+        android:title="@string/add" />
+    <item
+        android:id="@+id/generateBill"
+        android:icon="@drawable/baseline_receipt_24"
+        android:title="@string/bill" />
+    <item
+        android:id="@+id/report"
+        android:icon="@drawable/baseline_addchart_24"
+        android:title="@string/report" />
+</menu>

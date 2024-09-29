@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:text="Email Us"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/primary_color"
         android:textColor="@android:color/white"
         android:padding="16dp"/>
 
@@ -23,7 +22,6 @@
         android:layout_height="wrap_content"
         android:text="Call Us"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/primary_color"
         android:textColor="@android:color/white"
         android:padding="16dp"/>
 
@@ -32,7 +30,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Instagram"
-        android:backgroundTint="@color/primary_color"
         android:textColor="@android:color/white"
         android:padding="16dp"/>
 

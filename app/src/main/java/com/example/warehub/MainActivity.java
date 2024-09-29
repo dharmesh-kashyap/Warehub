@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private FrameLayout frameLayout;
+    private static final String CURRENT_FRAGMENT_KEY = "currentFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,14 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavView);
         frameLayout = findViewById(R.id.frameLayout);
 
-        loadFragment(new Dashboard());
+        if (savedInstanceState != null) {
+            Fragment currentFragment = getSupportFragmentManager().getFragment(savedInstanceState, CURRENT_FRAGMENT_KEY);
+            if (currentFragment != null) {
+                loadFragment(currentFragment);
+            }
+        } else {
+            loadFragment(new Dashboard());
+        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override
@@ -105,6 +113,16 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(selectedFragment);  // Load the selected fragment
 
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save the current fragment
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+        if (currentFragment != null) {
+            getSupportFragmentManager().putFragment(outState, CURRENT_FRAGMENT_KEY, currentFragment);
+        }
     }
 
 

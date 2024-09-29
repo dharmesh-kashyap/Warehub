@@ -15,4 +15,5 @@
     <string name="contact_us">Contact us</string>
     <string name="profile_edit">Profile edit</string>
     <string name="dark_theme">Dark Theme</string>
+    <string name="reset_app_data">Reset app data</string>
 </resources>

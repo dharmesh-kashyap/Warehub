@@ -27,6 +27,14 @@
             android:name=".MainActivity"
             android:exported="true">
         </activity>
+
+        <!-- Remove or modify any global screenOrientation setting if present -->
+        <!-- Example: -->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            tools:replace="android:screenOrientation"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

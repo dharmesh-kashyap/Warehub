@@ -22,4 +22,6 @@
     <string name="price">Price</string>
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="save_product">Save Product</string>
+    <string name="clear_search">Clear search</string>
+    <string name="search_products">Search products</string>
 </resources>

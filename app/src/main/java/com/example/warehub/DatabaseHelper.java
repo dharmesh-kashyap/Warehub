@@ -2,8 +2,11 @@ package com.example.warehub;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -40,5 +43,75 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_5, price);
         long result = db.insert(TABLE_NAME, null, contentValues);
         return result != -1; // returns true if inserted successfully
+    }
+
+    // Get all products from the database
+    public ArrayList<Product> getAllProducts() {
+        ArrayList<Product> productList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_1));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_2));
+                String code = cursor.getString(cursor.getColumnIndexOrThrow(COL_3));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(COL_4));
+                double price = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_5));
+
+                Product product = new Product(id, name, code, quantity, price);
+                productList.add(product);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return productList;
+    }
+
+    // Search products based on user query
+    // Search products based on user query
+    public ArrayList<Product> searchProducts(String query) {
+        ArrayList<Product> searchedProducts = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // SQL query to search by both product name and product code
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " +
+                        COL_2 + " LIKE ? OR " + COL_3 + " LIKE ?",
+                new String[]{"%" + query + "%", "%" + query + "%"});  // Using the query for both name and code search
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_1));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_2));
+                String code = cursor.getString(cursor.getColumnIndexOrThrow(COL_3));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(COL_4));
+                double price = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_5));
+
+                Product product = new Product(id, name, code, quantity, price);
+                searchedProducts.add(product);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return searchedProducts;
+    }
+
+
+
+
+    // Update product in the database
+    public boolean updateProduct(Product product) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_2, product.getProductName());
+        contentValues.put(COL_3, product.getProductCode());
+        contentValues.put(COL_4, product.getQuantity());
+        contentValues.put(COL_5, product.getPrice());
+        int result = db.update(TABLE_NAME, contentValues, COL_1 + " = ?", new String[]{String.valueOf(product.getId())});
+        return result > 0; // returns true if updated successfully
+    }
+
+    // Delete product from the database
+    public int deleteProduct(int productId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TABLE_NAME, COL_1 + " = ?", new String[]{String.valueOf(productId)});
     }
 }

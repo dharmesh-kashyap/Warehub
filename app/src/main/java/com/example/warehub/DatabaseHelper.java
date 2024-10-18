@@ -68,7 +68,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Search products based on user query
-    // Search products based on user query
     public ArrayList<Product> searchProducts(String query) {
         ArrayList<Product> searchedProducts = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -94,9 +93,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return searchedProducts;
     }
 
-
-
-
     // Update product in the database
     public boolean updateProduct(Product product) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -113,5 +109,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int deleteProduct(int productId) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, COL_1 + " = ?", new String[]{String.valueOf(productId)});
+    }
+
+    // Delete all data from the database
+    public void deleteAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME);
+        db.close();
+    }
+
+    public static String getTableName() {
+        return TABLE_NAME;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.warehub;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -8,10 +9,8 @@ import android.widget.FrameLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);  // Enable the back button in the toolbar
 
         bottomNavigationView = findViewById(R.id.bottomNavView);
         frameLayout = findViewById(R.id.frameLayout);
@@ -40,49 +39,50 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             Fragment currentFragment = getSupportFragmentManager().getFragment(savedInstanceState, CURRENT_FRAGMENT_KEY);
             if (currentFragment != null) {
-                loadFragment(currentFragment);
+                loadFragment(currentFragment, false);
             }
         } else {
-            loadFragment(new Dashboard());
+            loadFragment(new Dashboard(), false);
         }
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
-                Fragment selectedFragment = null;
-
-                // Handle navigation item selection
-                if (itemId == R.id.dashboard) {
-                    selectedFragment = new Dashboard();
-                } else if (itemId == R.id.manageItems) {
-                    selectedFragment = new ManageItems();
-                } else if (itemId == R.id.addProducts) {
-                    selectedFragment = new AddProducts();
-                } else if (itemId == R.id.generateBill) {
-                    selectedFragment = new GenerateBill();
-                } else if (itemId == R.id.report) {
-                    selectedFragment = new Report();
-                }
-
-                if (selectedFragment != null) {
-                    // Replace the fragment
-                    loadFragment(selectedFragment);
-                }
-
-                return true;
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            Fragment selectedFragment = getFragmentForMenuItem(item.getItemId());
+            if (selectedFragment != null) {
+                loadFragment(selectedFragment, true);
             }
-
-
+            return true;
         });
-
     }
 
-    private void loadFragment(Fragment fragment) {
+    private Fragment getFragmentForMenuItem(int itemId) {
+        if (itemId == R.id.dashboard) {
+            return new Dashboard();
+        } else if (itemId == R.id.manageItems) {
+            return new ManageItems();
+        } else if (itemId == R.id.addProducts) {
+            return new AddProducts();
+        } else if (itemId == R.id.generateBill) {
+            return new GenerateBill();
+        } else if (itemId == R.id.report) {
+            return new Report();
+        }
+        return null; // Return null if no fragment matches
+    }
+
+    private void loadFragment(Fragment fragment, boolean addToBackStack) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayout, fragment);  // Always replace to prevent overlap
-        fragmentTransaction.commit();
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.frameLayout);
+
+        // Only replace the fragment if it's not already displayed
+        if (currentFragment == null || !currentFragment.getClass().equals(fragment.getClass())) {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);  // Optional: add transition
+            fragmentTransaction.replace(R.id.frameLayout, fragment);
+            if (addToBackStack) {
+                fragmentTransaction.addToBackStack(null); // Add the current fragment to the back stack
+            }
+            fragmentTransaction.commit();
+        }
     }
 
     @Override
@@ -94,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Handle the back button in the toolbar
+        if (item.getItemId() == android.R.id.home) { // This is the back button in the toolbar
+            onBackPressed(); // Call the method to handle back navigation
+            return true;
+        }
+
         Fragment selectedFragment = null;
 
         // Handle options menu item clicks with if-else
@@ -101,16 +107,14 @@ public class MainActivity extends AppCompatActivity {
             selectedFragment = new ProfileEdit();  // Handle fragment for menu item "Name"
         } else if (item.getItemId() == R.id.settings) {
             selectedFragment = new settings();  // Handle fragment for menu item "Settings"
-          }
-        else if (item.getItemId() == R.id.contact_us) {
+        } else if (item.getItemId() == R.id.contact_us) {
             selectedFragment = new ContactUs();  // Handle fragment for menu item "Contact Us"
-        }
-        else {
-            return super.onOptionsItemSelected(item);  // Handle the default case
         }
 
         // Load the fragment if one is selected
-        loadFragment(selectedFragment);  // Load the selected fragment
+        if (selectedFragment != null) {
+            loadFragment(selectedFragment, true);  // Load the selected fragment
+        }
 
         return true;
     }
@@ -125,5 +129,53 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();  // Pop the fragment from back stack
+
+            // Update the BottomNavigationView to reflect the current fragment
+            fragmentManager.addOnBackStackChangedListener(this::updateBottomNavigationView);
+
+        } else {
+            showExitConfirmationDialog(); // Show confirmation dialog to exit the app
+        }
+    }
+
+    private void updateBottomNavigationView() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frameLayout);
+
+        if (currentFragment instanceof Dashboard) {
+            bottomNavigationView.setSelectedItemId(R.id.dashboard);
+        } else if (currentFragment instanceof ManageItems) {
+            bottomNavigationView.setSelectedItemId(R.id.manageItems);
+        } else if (currentFragment instanceof AddProducts) {
+            bottomNavigationView.setSelectedItemId(R.id.addProducts);
+        } else if (currentFragment instanceof GenerateBill) {
+            bottomNavigationView.setSelectedItemId(R.id.generateBill);
+        } else if (currentFragment instanceof Report) {
+            bottomNavigationView.setSelectedItemId(R.id.report);
+        } else if (currentFragment instanceof ProfileEdit) {
+            bottomNavigationView.setSelectedItemId(R.id.Name);
+        } else if (currentFragment instanceof settings) {
+            bottomNavigationView.setSelectedItemId(R.id.settings);
+        } else if (currentFragment instanceof ContactUs) {
+            bottomNavigationView.setSelectedItemId(R.id.contact_us);
+        }
+    }
+
+    private void showExitConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Exit")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.super.onBackPressed();  // Exit the app
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
 }

@@ -79,7 +79,6 @@ public class AddProducts extends Fragment {
 
         if (isInserted) {
             Toast.makeText(requireContext(), "Product Saved", Toast.LENGTH_SHORT).show();
-            // Optionally, clear the fields after saving
             productName.setText("");
             productCode.setText("");
             productQuantity.setText("");

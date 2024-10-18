@@ -29,19 +29,19 @@ public class ContactUs extends Fragment {
         // Set up email button click listener
         emailButton.setOnClickListener(v -> {
             Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-            emailIntent.setData(Uri.parse("mailto:dharmeshkashyap46@gmail.com"));  // Update email address
+            emailIntent.setData(Uri.parse("mailto:warehub@gmail.com"));  // Update email address
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Customer Support");
             startActivity(Intent.createChooser(emailIntent, "Send Email"));
         });
 
         contactButton.setOnClickListener(v -> {
             Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
-            phoneIntent.setData(Uri.parse("tel:+918928210971"));  // Update phone number
+            phoneIntent.setData(Uri.parse("tel:+919876543210"));  // Update phone number
             startActivity(phoneIntent);
         });
 
         instagramButton.setOnClickListener(v -> {
-            Uri instagramUri = Uri.parse("https://www.instagram.com/dharmesh__kashyap");  // Update Instagram URL
+            Uri instagramUri = Uri.parse("https://www.instagram.com/");  // Update Instagram URL
             Intent instagramIntent = new Intent(Intent.ACTION_VIEW, instagramUri);
             instagramIntent.setPackage("com.instagram.android");  // Open in Instagram app if installed
             try {

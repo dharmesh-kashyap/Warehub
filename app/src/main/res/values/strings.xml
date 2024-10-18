@@ -24,4 +24,8 @@
     <string name="save_product">Save Product</string>
     <string name="clear_search">Clear search</string>
     <string name="search_products">Search products</string>
+    <string name="add_name_to_generate_report">Add name to generate report</string>
+    <string name="generate">Generate</string>
+    <string name="final_report_csv">final_report.csv</string>
+    <string name="generate_report">Generate Report</string>
 </resources>

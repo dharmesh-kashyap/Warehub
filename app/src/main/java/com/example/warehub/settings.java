@@ -2,7 +2,6 @@ package com.example.warehub;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,16 +10,17 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class settings extends Fragment {
 
     private SwitchCompat themeSwitch;
+    private DatabaseHelper databaseHelper;
 
     @Nullable
     @Override
@@ -28,6 +28,7 @@ public class settings extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         themeSwitch = view.findViewById(R.id.switch_theme);
+        databaseHelper = new DatabaseHelper(getContext());
 
         // Load the current theme preference
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -62,6 +63,7 @@ public class settings extends Fragment {
 
         return view;
     }
+
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Delete All Data");
@@ -72,7 +74,9 @@ public class settings extends Fragment {
 
         // Set up the buttons
         dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Confirm", (dialogInterface, which) -> {
-            // Logic to delete the database should go here (leave this empty)
+            // Logic to delete the database
+            databaseHelper.deleteAllData();
+            Toast.makeText(getContext(), "All data deleted successfully", Toast.LENGTH_SHORT).show();
         });
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", (dialogInterface, which) -> dialog.dismiss());
 

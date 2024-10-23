@@ -3,21 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+<TextView
+    android:id="@+id/allitems"
+    android:layout_width="wrap_content"
+    android:text="@string/manage_items"
+    android:layout_marginTop="10dp"
+    android:textSize="35dp"
+    android:textStyle="bold"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content"/>
 
     <EditText
+        android:layout_marginTop="15dp"
         android:id="@+id/search_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Search Products" />
+        android:layout_width="350dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_height="30dp"
+        android:hint="Search Products"
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
+        android:drawableEnd="@drawable/ic_search"
+        android:paddingStart="40dp"
+        android:background="@drawable/editboxedge"
+        android:paddingEnd="16dp" />
 
-    <ImageView
-        android:id="@+id/clear_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        android:contentDescription="Clear Search" />
+<!--    <ImageView-->
+<!--        android:id="@+id/clear_search"-->
+<!--        android:layout_width=""-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:src="@drawable/baseline_backspace_24"-->
+<!--        android:contentDescription="Clear Search" />-->
 
     <ListView
+        android:layout_marginTop="20dp"
         android:id="@+id/product_list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -1,49 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/product_name"
-        android:layout_width="match_parent"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/product_code"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/product_quantity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="85dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/product_price"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-        <Button
+
+
+        <ImageButton
             android:id="@+id/edit_button"
-            android:layout_width="0dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Edit" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_edit_24"
+            android:contentDescription="Edit"
+            android:layout_margin="8dp"
+            android:padding="12dp"
+            app:tint="#39AD3D" />
 
-        <Button
+
+        <ImageButton
             android:id="@+id/delete_button"
-            android:layout_width="0dp"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Delete" />
-    </LinearLayout>
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/baseline_delete_24"
+            android:contentDescription="Delete"
+            android:layout_margin="8dp"
+            android:padding="12dp"
+            app:tint="#BA1818"/>
+
+
 </LinearLayout>

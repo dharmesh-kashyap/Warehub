@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class AddProducts extends Fragment {
@@ -24,7 +25,8 @@ public class AddProducts extends Fragment {
 
 
     private EditText productName, productCode, productQuantity, productPrice;
-    private Button scanQrButton, saveButton;
+    private ImageButton scanQrButton;
+    private Button saveButton;
     private DatabaseHelper myDb;
 
     @Nullable
@@ -78,13 +80,13 @@ public class AddProducts extends Fragment {
         boolean isInserted = myDb.insertData(name, code, quantity, price);
 
         if (isInserted) {
-            Toast.makeText(requireContext(), "Product Saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Product Added", Toast.LENGTH_SHORT).show();
             productName.setText("");
             productCode.setText("");
             productQuantity.setText("");
             productPrice.setText("");
         } else {
-            Toast.makeText(requireContext(), "Failed to Save Product", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Failed to Add Product", Toast.LENGTH_SHORT).show();
         }
     }
 

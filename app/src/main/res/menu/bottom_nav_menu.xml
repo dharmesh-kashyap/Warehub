@@ -3,22 +3,17 @@
 
     <item
         android:id="@+id/dashboard"
-        android:icon="@drawable/baseline_space_dashboard_24"
-        android:title="@string/dashboard" />
+        android:icon="@drawable/baseline_space_dashboard_24" />
     <item
         android:id="@+id/manageItems"
-        android:icon="@drawable/baseline_inventory_24"
-        android:title="@string/items" />
+        android:icon="@drawable/baseline_inventory_24" />
     <item
         android:id="@+id/addProducts"
-        android:icon="@drawable/baseline_add_circle_outline_24"
-        android:title="@string/add" />
+        android:icon="@drawable/baseline_add_circle_outline_24" />
     <item
         android:id="@+id/generateBill"
-        android:icon="@drawable/baseline_receipt_24"
-        android:title="@string/bill" />
+        android:icon="@drawable/baseline_receipt_24" />
     <item
         android:id="@+id/report"
-        android:icon="@drawable/baseline_addchart_24"
-        android:title="@string/report" />
+        android:icon="@drawable/baseline_addchart_24"/>
 </menu>

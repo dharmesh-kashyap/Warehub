@@ -1,6 +1,7 @@
 package com.example.warehub;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,7 +24,7 @@ public class ManageItems extends Fragment {
     private DatabaseHelper databaseHelper;
     private ListView productListView;
     private EditText searchBox;
-    private ImageView clearSearch;
+    // private ImageView clearSearch;
     private ProductAdapter productAdapter;
     private ArrayList<Product> productList;
 
@@ -35,7 +36,7 @@ public class ManageItems extends Fragment {
         // Initialize UI elements
         productListView = view.findViewById(R.id.product_list_view);
         searchBox = view.findViewById(R.id.search_box);
-        clearSearch = view.findViewById(R.id.clear_search);
+//        clearSearch = view.findViewById(R.id.clear_search);
 
         // Initialize Database Helper
         databaseHelper = new DatabaseHelper(getContext());
@@ -46,7 +47,8 @@ public class ManageItems extends Fragment {
         // Search box functionality
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -59,15 +61,16 @@ public class ManageItems extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Clear search functionality
-        clearSearch.setOnClickListener(v -> {
-            searchBox.setText("");
-            loadProducts();
-        });
-
+//        clearSearch.setOnClickListener(v -> {
+//            searchBox.setText("");
+//            loadProducts();
+//        });
+//
         return view;
     }
 
@@ -119,11 +122,11 @@ public class ManageItems extends Fragment {
         editProductQuantity.setText(String.valueOf(product.getQuantity()));
         editProductPrice.setText(String.valueOf(product.getPrice()));
 
-        // Create and show edit product dialog
-        new AlertDialog.Builder(getContext())
+        // Create and show edit product dialog with rounded corners
+        AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.RoundedAlertDialog)
                 .setTitle("Edit Product")
                 .setView(dialogView)
-                .setPositiveButton("Save", (dialog, which) -> {
+                .setPositiveButton("Save", (dialog1, which) -> {
                     // Get updated product details
                     String newName = editProductName.getText().toString();
                     String newCode = editProductCode.getText().toString();
@@ -146,6 +149,18 @@ public class ManageItems extends Fragment {
                     }
                 })
                 .setNegativeButton("Cancel", null)
-                .show();
+                .create();
+
+        dialog.setOnShowListener(dialogInterface -> {
+            // Get the negative button (Cancel) and change its text color to red
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
+
+            // Get the positive button (Save) and change its text color to green
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GREEN);
+        });
+
+        dialog.show();
     }
+
+
 }

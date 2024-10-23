@@ -1,46 +1,84 @@
-<LinearLayout
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="12dp">
 
-    <EditText
-        android:id="@+id/productName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/product_name" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/productCode"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/txtadditems"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/product_code" />
+        android:text="@string/additems"
+        android:layout_gravity="center"
+        android:textSize="35dp"
+        android:textStyle="bold"/>
 
-    <EditText
-        android:id="@+id/productQuantity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/quantity"
-        android:inputType="number"/>
+        <ImageButton
+            android:id="@+id/scanQrButton"
+            android:layout_width="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_height="100dp"
+            android:src="@drawable/baseline_qr_code_scanner_24"
+            android:text="@string/scan_qr_code" />
+        <TextView
+            android:id="@+id/txtscan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scan"
+            android:layout_gravity="center"
+            android:textSize="20dp" />
+        <EditText
+            android:id="@+id/productName"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:hint="@string/product_name" />
 
-    <EditText
-        android:id="@+id/productPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/price"
-        android:inputType="numberDecimal"/>
+        <EditText
+            android:id="@+id/productCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:hint="@string/product_code" />
 
-    <Button
-        android:id="@+id/scanQrButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/scan_qr_code" />
+        <EditText
+            android:id="@+id/productQuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/quantity"
+            android:textStyle="bold"
+            android:inputType="number"/>
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save_product" />
+        <EditText
+            android:id="@+id/productPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/price"
+            android:textStyle="bold"
+            android:inputType="numberDecimal"/>
 
-</LinearLayout>
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="@string/save_product"
+                android:backgroundTint="#1FA425"/>
+
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

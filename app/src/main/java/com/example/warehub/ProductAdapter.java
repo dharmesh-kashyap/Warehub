@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -47,15 +48,15 @@ public class ProductAdapter extends BaseAdapter {
         TextView productCode = convertView.findViewById(R.id.product_code);
         TextView productQuantity = convertView.findViewById(R.id.product_quantity);
         TextView productPrice = convertView.findViewById(R.id.product_price);
-        Button editButton = convertView.findViewById(R.id.edit_button);
-        Button deleteButton = convertView.findViewById(R.id.delete_button);
+        ImageButton editButton = convertView.findViewById(R.id.edit_button);
+        ImageButton deleteButton = convertView.findViewById(R.id.delete_button);
 
         Product product = productList.get(position);
 
-        productName.setText(product.getProductName());
-        productCode.setText(product.getProductCode());
+        productName.setText("Name:     " + product.getProductName());
+        productCode.setText("Code:     " + product.getProductCode());
         productQuantity.setText("Quantity: " + product.getQuantity());
-        productPrice.setText("Price: " + product.getPrice());
+        productPrice.setText("Price:   " + product.getPrice());
 
         editButton.setOnClickListener(v -> manageItemsFragment.editProduct(product));
         deleteButton.setOnClickListener(v -> manageItemsFragment.deleteProduct(product));

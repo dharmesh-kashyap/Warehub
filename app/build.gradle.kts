@@ -44,6 +44,9 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.4.1")
     implementation("com.opencsv:opencsv:5.5.2")
+    implementation ("androidx.cardview:cardview:1.0.0")
+
+
 
     implementation ("com.itextpdf:itext7-core:7.1.14")
     implementation("androidx.recyclerview:recyclerview:1.3.0")

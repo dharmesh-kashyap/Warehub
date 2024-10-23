@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,8 +38,8 @@ import java.io.IOException;
 public class Report extends Fragment {
 
     private EditText etFileName;
-    private Button btnGenerate;
-    private Button btnShare;
+    private ImageButton btnGenerate;
+    private ImageButton btnShare;
     private DatabaseHelper databaseHelper;
 
     private static final int PERMISSION_REQUEST_CODE = 1;

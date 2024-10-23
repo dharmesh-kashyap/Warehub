@@ -1,9 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
+
+    <TextView
+        android:id="@+id/txtsettings"
+        android:text="@string/settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="35dp"
+        android:layout_marginTop="30dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,15 +37,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold" />
-
     </LinearLayout>
-
 
     <Button
         android:id="@+id/Resetbutton"
         android:layout_width="match_parent"
         android:layout_height="63dp"
         android:gravity="center"
+        android:textStyle="bold"
         android:layout_marginTop="20dp"
         android:text="@string/reset_app_data" />
+
 </LinearLayout>

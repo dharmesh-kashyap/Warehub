@@ -5,12 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="470dp"
         android:layout_margin="16dp"
         app:cardElevation="4dp"
         app:cardCornerRadius="12dp">
@@ -18,12 +17,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="vertical"
             android:padding="6dp">
 
             <TextView
                 android:id="@+id/tv_title"
+                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/generate_report"
@@ -35,8 +35,9 @@
                 android:id="@+id/tv_instruction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="80dp"
                 android:textStyle="bold"
+                android:textSize="17dp"
                 android:gravity="center"
                 android:text="@string/add_name_to_generate_report" />
 
@@ -44,22 +45,25 @@
                 android:id="@+id/et_file_name"
                 android:layout_width="240dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
+                android:layout_gravity="center"
                 android:hint="@string/final_report_csv" />
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp">
 
-                <ImageButton
+                <Button
                     android:id="@+id/btn_generate"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
-                    android:src="@drawable/report"
+                    android:text="@string/generate"
                     android:contentDescription="@string/generate"
                     android:scaleType="fitCenter"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="@drawable/cornerbox"
                     android:padding="8dp"/>
 
 
@@ -71,6 +75,7 @@
                     android:text="Share Report"
                     android:scaleType="fitCenter"
                     android:background="?attr/selectableItemBackground"
+                    android:layout_marginLeft="22dp"
                     android:padding="8dp"
                     android:src="@drawable/baseline_share_24" />
 

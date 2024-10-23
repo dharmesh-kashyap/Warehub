@@ -31,4 +31,5 @@
     <string name="generate_report">Generate Report</string>
     <string name="additems">Add Items</string>
     <string name="scan">Click Here To Scan</string>
+    <string name="update">Update product</string>
 </resources>

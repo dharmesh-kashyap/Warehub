@@ -131,6 +131,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (fragmentManager.getBackStackEntryCount() > 0) {
@@ -172,7 +173,7 @@ public class MainActivity2 extends AppCompatActivity {
                 .setMessage("Are you sure you want to exit?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        MainActivity.super.onBackPressed();  // Exit the app
+                        MainActivity2.super.onBackPressed();  // Exit the app
                     }
                 })
                 .setNegativeButton("No", null)

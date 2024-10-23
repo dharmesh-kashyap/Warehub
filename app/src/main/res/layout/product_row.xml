@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical">
+
+    <!-- Product Name Spinner -->
+    <Spinner
+        android:id="@+id/product_name_input"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:backgroundTint="#cccccc" />
+
+    <!-- Quantity Dropdown -->
+    <Spinner
+        android:id="@+id/quantity_input"
+        android:layout_width="5dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:backgroundTint="#cccccc"
+       />
+
+    <!-- Price TextView -->
+    <TextView
+        android:id="@+id/price_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:text="Price"
+        android:backgroundTint="#cccccc" />
+
+    <!-- Remove Button -->
+    <Button
+        android:id="@+id/remove_product_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove"
+        android:backgroundTint="#837D7D"
+        android:textColor="#ffffff"
+        android:layout_marginLeft="8dp" />
+</LinearLayout>

@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     EditText username, password;
-    Button btnlogin,btnForgotPassword;
+    Button btnlogin, btnForgotPassword;
     Button signup;
     DBHelper DB;
 
@@ -22,19 +22,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Temporary clear SharedPreferences for testing
-        SharedPreferences.Editor editor = getSharedPreferences("loginPrefs", MODE_PRIVATE).edit();
-        editor.clear();  // Clear previous login state
-        editor.apply();  // Apply changes
-
         // Check if the user is already logged in
         SharedPreferences prefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         boolean isLoggedIn = prefs.getBoolean("isLoggedIn", false);
 
+        // If user is logged in, redirect to MainActivity2
         if (isLoggedIn) {
             Intent intent = new Intent(getApplicationContext(), MainActivity2.class);  // Redirect to MainActivity2
             startActivity(intent);
-            finish();  // Close LoginActivity
+            finish();  // Close MainActivity (login screen)
             return;  // Exit onCreate to avoid loading login UI
         }
 
@@ -43,11 +39,12 @@ public class MainActivity extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         btnlogin = findViewById(R.id.btnsignin1);
-
         btnForgotPassword = findViewById(R.id.btnforgotpassword);
+        signup = findViewById(R.id.signup8);
+
         DB = new DBHelper(this);
 
-        // Forgot password button click listener
+        // Forgot Password button click listener
         btnForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        signup = findViewById(R.id.signup8);
+        // Sign up button click listener
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getApplicationContext(), registration.class);
+                Intent intent = new Intent(getApplicationContext(), registration.class);
                 startActivity(intent);
             }
         });

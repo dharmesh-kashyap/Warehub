@@ -254,6 +254,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_BILLS, COLUMN_BILL_ID + " = ?", new String[]{String.valueOf(billId)}) > 0;
     }
+
+    // Method to get products with quantity less than 3
+    public ArrayList<Product> getLowQuantityProducts() {
+        ArrayList<Product> lowQuantityProducts = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_4 + " < 3", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_1));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_2));
+                String code = cursor.getString(cursor.getColumnIndexOrThrow(COL_3));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow(COL_4));
+                double price = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_5));
+
+                Product product = new Product(id, name, code, quantity, price);
+                lowQuantityProducts.add(product);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return lowQuantityProducts;
+    }
+
 }
 
 

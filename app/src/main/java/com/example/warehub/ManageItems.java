@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -126,12 +127,13 @@ public class ManageItems extends Fragment {
         AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.RoundedAlertDialog)
                 .setTitle("Edit Product")
                 .setView(dialogView)
-                .setPositiveButton("Save", (dialog1, which) -> {
+                .setPositiveButton("Update", (dialog1, which) -> {
                     // Get updated product details
                     String newName = editProductName.getText().toString();
                     String newCode = editProductCode.getText().toString();
                     int newQuantity = Integer.parseInt(editProductQuantity.getText().toString());
                     double newPrice = Double.parseDouble(editProductPrice.getText().toString());
+
 
                     // Update the product object
                     product.setProductName(newName);
@@ -152,15 +154,16 @@ public class ManageItems extends Fragment {
                 .create();
 
         dialog.setOnShowListener(dialogInterface -> {
+            // Get the positive button (Save) and change its text color to green
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GREEN);
+
             // Get the negative button (Cancel) and change its text color to red
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
 
-            // Get the positive button (Save) and change its text color to green
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GREEN);
+
         });
 
         dialog.show();
     }
-
 
 }

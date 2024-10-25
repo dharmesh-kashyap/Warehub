@@ -38,7 +38,7 @@ import java.io.IOException;
 public class Report extends Fragment {
 
     private EditText etFileName;
-    private ImageButton btnGenerate;
+    private Button btnGenerate;
     private ImageButton btnShare;
     private DatabaseHelper databaseHelper;
 

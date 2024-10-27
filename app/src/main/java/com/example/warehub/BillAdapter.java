@@ -13,9 +13,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.File;
+import java.util.ArrayList;
+
 public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder> {
     private ArrayList<Bill> bills;
     private OnBillClickListener listener;
+    private Context context;
 
     public BillAdapter(ArrayList<Bill> bills, OnBillClickListener listener) {
         this.bills = bills;
@@ -25,8 +43,8 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
     @NonNull
     @Override
     public BillViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the new layout for each bill item
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.biil_item, parent, false);
+        context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.biil_item, parent, false);
         return new BillViewHolder(view);
     }
 
@@ -34,21 +52,42 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
     public void onBindViewHolder(@NonNull BillViewHolder holder, int position) {
         Bill bill = bills.get(position);
 
-        // Set the views with the bill data
         holder.customerNameTextView.setText(bill.getCustomerName());
-        holder.totalAmountTextView.setText(String.format("₹%.2f", bill.getTotalAmount())); // Format amount in rupees
-        holder.billDateTextView.setText(bill.getBillDate());
+        holder.billNumberTextView.setText(String.valueOf(bill.getId()));
+        holder.totalAmountTextView.setText(String.format("₹%.2f", bill.getTotalAmount()));
 
-        holder.itemView.setOnClickListener(v -> listener.onBillClicked(bill));
+        holder.downloadButton.setOnClickListener(v -> downloadBill(bill));
+        holder.deleteButton.setOnClickListener(v -> deleteBill(bill, position));
+    }
 
-        holder.deleteButton.setOnClickListener(v -> {
-            // Delete bill logic
-            DatabaseHelper db = new DatabaseHelper(holder.itemView.getContext());
-            if (db.deleteBill(bill.getId())) {
-                bills.remove(position);
-                notifyItemRemoved(position);
-            }
-        });
+    private void downloadBill(Bill bill) {
+        File pdfFile = new File(bill.getPdfPath());
+        if (!pdfFile.exists()) {
+            Toast.makeText(context, "PDF file not found!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Uri pdfUri = FileProvider.getUriForFile(context,
+                context.getPackageName() + ".fileprovider", pdfFile);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(pdfUri, "application/pdf");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        } else {
+            Toast.makeText(context, "No app available to view PDF.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void deleteBill(Bill bill, int position) {
+        DatabaseHelper db = new DatabaseHelper(context);
+        if (db.deleteBill(bill.getId())) {
+            bills.remove(position);
+            notifyItemRemoved(position);
+            Toast.makeText(context, "Bill deleted", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -63,17 +102,15 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
     }
 
     class BillViewHolder extends RecyclerView.ViewHolder {
-        TextView customerNameTextView;
-        TextView totalAmountTextView;
-        TextView billDateTextView;
-        Button deleteButton;
+        TextView customerNameTextView, billNumberTextView, totalAmountTextView;
+        ImageView downloadButton, deleteButton;
 
         public BillViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Reference the updated IDs from item_bill.xml
             customerNameTextView = itemView.findViewById(R.id.bill_customer_name);
+            billNumberTextView = itemView.findViewById(R.id.bill_number);
             totalAmountTextView = itemView.findViewById(R.id.bill_total_amount);
-            billDateTextView = itemView.findViewById(R.id.bill_date);
+            downloadButton = itemView.findViewById(R.id.download_button);
             deleteButton = itemView.findViewById(R.id.delete_button);
         }
     }
@@ -82,4 +119,3 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
         void onBillClicked(Bill bill);
     }
 }
-

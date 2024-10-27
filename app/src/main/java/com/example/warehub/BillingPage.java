@@ -1,6 +1,5 @@
 package com.example.warehub;
 
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,7 +42,7 @@ import com.itextpdf.layout.element.Image;
 public class BillingPage extends Fragment {
 
     private AutoCompleteTextView customerNameInput;
-    private TextView totalAmountTextView;
+    private TextView totalAmountTextView,totalItemsTextView;
     private LinearLayout productListContainer;
     private Button generateBillButton, addProductButton;
     private DatabaseHelper databaseHelper;
@@ -57,16 +56,29 @@ public class BillingPage extends Fragment {
 
         initializeViews(view);
         databaseHelper = new DatabaseHelper(getActivity());
-        addProductRow();
 
-        addProductButton.setOnClickListener(v -> addProductRow());
+        addProductRow(); // Add the first product row by default.
+
+        addProductButton.setOnClickListener(v -> {
+            addProductRow();
+            //Toast.makeText(getActivity(), "Select a product before choosing quantity", Toast.LENGTH_SHORT).show();
+        });
+
         generateBillButton.setOnClickListener(v -> generateBill());
+
+
+        Button btnGenerateBill = getActivity().findViewById(R.id.btn_generate_bill);
+        Button btnViewAllBills = getActivity().findViewById(R.id.btn_view_all_bills);
+
+        if (btnGenerateBill != null) btnGenerateBill.setVisibility(View.GONE);
+        if (btnViewAllBills != null) btnViewAllBills.setVisibility(View.GONE);
 
         return view;
     }
 
     private void initializeViews(View view) {
         customerNameInput = view.findViewById(R.id.customer_name_input);
+        totalItemsTextView = view.findViewById(R.id.total_items_text_view);
         totalAmountTextView = view.findViewById(R.id.total_amount_text_view);
         productListContainer = view.findViewById(R.id.product_list_container);
         generateBillButton = view.findViewById(R.id.generate_bill_button);
@@ -76,80 +88,138 @@ public class BillingPage extends Fragment {
     private void addProductRow() {
         View productRow = LayoutInflater.from(getActivity()).inflate(R.layout.product_row, productListContainer, false);
 
-        Spinner productNameInput = productRow.findViewById(R.id.product_name_input); // Changed to Spinner
+        Spinner productNameInput = productRow.findViewById(R.id.product_name_input);
         Spinner quantityInput = productRow.findViewById(R.id.quantity_input);
-        TextView priceInput = productRow.findViewById(R.id.price_input);
         Button removeProductButton = productRow.findViewById(R.id.remove_product_button);
 
-        removeProductButton.setOnClickListener(v -> productListContainer.removeView(productRow));
+        // Disable quantity selection initially
+        quantityInput.setEnabled(false);
 
-        setupProductSpinner(productNameInput, quantityInput, priceInput);
+        removeProductButton.setOnClickListener(v -> {
+            productListContainer.removeView(productRow);
+            updateTotals(); // Recalculate totals when a product row is removed.
+        });
+
+        setupProductSpinner(productNameInput, quantityInput); // Set up product selection
+        setupQuantitySpinnerWithValidation(productNameInput, quantityInput); // Set up quantity with validation
         productListContainer.addView(productRow);
+        updateTotals(); // Update totals after adding a new product row.
     }
 
-    private void setupProductSpinner(Spinner productNameInput, Spinner quantityInput, TextView priceInput) {
+    private void setupProductSpinner(Spinner productNameInput, Spinner quantityInput) {
         ArrayList<Product> availableProducts = databaseHelper.getAllProductsWithQuantityGreaterThanZero();
         ArrayList<String> productNames = getProductNames(availableProducts);
-
-        // Add a "Select Product" hint at the start of the list
-        productNames.add(0, "Product");
+        productNames.add(0, "Select Product");
 
         ArrayAdapter<String> productAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, productNames);
         productAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         productNameInput.setAdapter(productAdapter);
 
-        // Prevent selection of the hint item
         productNameInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-                    // Do nothing if the first item (hint) is selected
-                    return;
+                    quantityInput.setEnabled(false); // Disable quantity if no product is selected
+                    initializeQuantitySpinner(quantityInput, 0); // Reset quantity options
+                } else {
+                    quantityInput.setEnabled(true); // Enable quantity when a product is selected
+                    Product selectedProduct = availableProducts.get(position - 1);
+                    initializeQuantitySpinner(quantityInput, selectedProduct.getQuantity());
                 }
+                updateTotals();
+            }
 
-                String selectedProductName = (String) parent.getItemAtPosition(position);
-                Product selectedProduct = getProductByName(selectedProductName, availableProducts);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
 
-                if (selectedProduct != null) {
-                    priceInput.setText(String.valueOf(selectedProduct.getPrice()));
-                    setupQuantitySpinner(quantityInput, selectedProduct.getQuantity());
+    private void setupQuantitySpinnerWithValidation(Spinner productNameInput, Spinner quantityInput) {
+        quantityInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0 && productNameInput.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getActivity(), "Please select a product first", Toast.LENGTH_SHORT).show();
+                    quantityInput.setSelection(0); // Reset to "Pick Qty"
+                } else if (position > 0) {
+                    updateTotals();
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
+
+    private ArrayList<String> getProductNames(ArrayList<Product> products) {
+        ArrayList<String> productNames = new ArrayList<>();
+        for (Product product : products) {
+            productNames.add(product.getProductName());
+        }
+        return productNames;
+    }
+
+    private void initializeQuantitySpinner(Spinner quantityInput, int maxQuantity) {
+        ArrayList<String> quantities = new ArrayList<>();
+        quantities.add("Pick Qty"); // Default option
+
+        for (int i = 1; i <= maxQuantity; i++) {
+            quantities.add(String.valueOf(i));
+        }
+
+        ArrayAdapter<String> quantityAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, quantities);
+        quantityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        quantityInput.setAdapter(quantityAdapter);
+
+        // Set up the quantity selection listener to check product selection first
+        quantityInput.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Get the parent row to access the product spinner
+                View parentRow = (View) parent.getParent();
+                Spinner productNameInput = parentRow.findViewById(R.id.product_name_input);
+
+                // Show toast if quantity is selected before product
+                if (position > 0 && productNameInput.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getActivity(), "Select a product first", Toast.LENGTH_SHORT).show();
+                    quantityInput.setSelection(0); // Reset to "Pick Qty" if no product is selected
+                } else if (position > 0 && productNameInput.getSelectedItemPosition() > 0) {
+                    // Only update totals if both product and quantity are selected
+                    updateTotals();
+                }
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
     }
 
 
 
-    private void setupQuantitySpinner(Spinner quantityInput, int maxQuantity) {
-        ArrayList<Integer> quantities = new ArrayList<>();
-        for (int i = 1; i <= maxQuantity; i++) {
-            quantities.add(i);
-        }
-        ArrayAdapter<Integer> quantityAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, quantities);
-        quantityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        quantityInput.setAdapter(quantityAdapter);
-    }
 
-    private ArrayList<String> getProductNames(ArrayList<Product> products) {
-        ArrayList<String> names = new ArrayList<>();
-        for (Product product : products) {
-            names.add(product.getProductName());
-        }
-        return names;
-    }
+    private void updateTotals() {
+        int totalItems = 0;
+        double totalAmount = 0.0;
 
-    private Product getProductByName(String productName, ArrayList<Product> products) {
-        for (Product product : products) {
-            if (product.getProductName().equals(productName)) {
-                return product;
+        int rowCount = productListContainer.getChildCount();
+        for (int i = 0; i < rowCount; i++) {
+            View productRow = productListContainer.getChildAt(i);
+            Spinner quantityInput = productRow.findViewById(R.id.quantity_input);
+            Spinner productNameInput = productRow.findViewById(R.id.product_name_input);
+
+            if (quantityInput.getSelectedItemPosition() > 0 && productNameInput.getSelectedItemPosition() > 0) {
+                String productName = (String) productNameInput.getSelectedItem();
+                int quantity = Integer.parseInt((String) quantityInput.getSelectedItem());
+
+                Product product = databaseHelper.getProductByName(productName);
+                totalAmount += quantity * product.getPrice();
+                totalItems += quantity;
             }
         }
-        return null;
+
+        totalItemsTextView.setText("Total Items: " + totalItems);
+        totalAmountTextView.setText("Total Amount: " + totalAmount);
     }
 
     private void generateBill() {
@@ -166,33 +236,22 @@ public class BillingPage extends Fragment {
             View productRow = productListContainer.getChildAt(i);
             Spinner productNameInput = productRow.findViewById(R.id.product_name_input);
             Spinner quantityInput = productRow.findViewById(R.id.quantity_input);
-            TextView priceInput = productRow.findViewById(R.id.price_input);
 
-            // Check if the user selected the hint (index 0)
-            if (productNameInput.getSelectedItemPosition() == 0) {
-                Toast.makeText(getActivity(), "Please select a product", Toast.LENGTH_SHORT).show();
+            if (productNameInput.getSelectedItemPosition() == 0 || quantityInput.getSelectedItemPosition() == 0) {
+                Toast.makeText(getActivity(), "Please select product and quantity", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             String productName = (String) productNameInput.getSelectedItem();
-            int selectedQuantity = (int) quantityInput.getSelectedItem();
-            String priceText = priceInput.getText().toString().trim();
+            int selectedQuantity = Integer.parseInt((String) quantityInput.getSelectedItem());
 
-            if (priceText.isEmpty()) {
-                Toast.makeText(getActivity(), "Price is not available", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            Product selectedProduct = databaseHelper.getProductByName(productName);
+            double price = selectedProduct.getPrice();
 
-            double price = Double.parseDouble(priceText);
             totalAmount += selectedQuantity * price;
-            com.example.warehub.Product selectedProduct = databaseHelper.getProductByName(productName);
-
-            // Deduct selected quantity from database
-            if (selectedProduct != null) {
-                int newQuantity = selectedProduct.getQuantity() - selectedQuantity;
-                selectedProduct.setQuantity(newQuantity);
-                databaseHelper.updateProductquantity(selectedProduct);
-            }
+            int newQuantity = selectedProduct.getQuantity() - selectedQuantity;
+            selectedProduct.setQuantity(newQuantity);
+            databaseHelper.updateProductquantity(selectedProduct);
 
             productList.add(new Product(productName, selectedQuantity, price));
         }
@@ -200,8 +259,6 @@ public class BillingPage extends Fragment {
         totalAmountTextView.setText("Total Amount: " + totalAmount);
         saveBillToDatabase(customerName);
     }
-
-
 
     private void saveBillToDatabase(String customerName) {
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -247,7 +304,6 @@ public class BillingPage extends Fragment {
             document.add(table);
             document.close();
             openGeneratedPDF(pdfPath);
-
             resetPage();
 
         } catch (IOException e) {
@@ -257,52 +313,17 @@ public class BillingPage extends Fragment {
 
     private void openGeneratedPDF(String pdfPath) {
         File pdfFile = new File(pdfPath);
-        Uri pdfUri = FileProvider.getUriForFile(getActivity(), getActivity().getPackageName() + ".fileprovider", pdfFile);
+        Uri pdfUri = FileProvider.getUriForFile(getActivity(), "com.example.warehub.fileprovider", pdfFile);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(pdfUri, "application/pdf");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
     }
 
     private void resetPage() {
-        // Clear customer name input
         customerNameInput.setText("");
-
-        // Reset total amount display
         totalAmountTextView.setText("Total Amount: 0.0");
-
-        // Remove all product rows
         productListContainer.removeAllViews();
-
-        // Optionally, add a new product row
         addProductRow();
     }
-
-//    public static class Product {
-//        private String name;
-//        private int quantity;
-//        private double price;
-//
-//        public Product(String name, int quantity, double price) {
-//            this.name = name;
-//            this.quantity = quantity;
-//            this.price = price;
-//        }
-//
-//        public String getName() {
-//            return name;
-//        }
-//
-//        public int getQuantity() {
-//            return quantity;
-//        }
-//
-//        public void setQuantity(int quantity) {
-//            this.quantity = quantity;
-//        }
-//
-//        public double getPrice() {
-//            return price;
-//        }
-//    }
 }

@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -57,6 +58,13 @@ public class ViewBills extends Fragment {
             public void afterTextChanged(Editable editable) {}
         });
 
+
+        Button btnGenerateBill = getActivity().findViewById(R.id.btn_generate_bill);
+        Button btnViewAllBills = getActivity().findViewById(R.id.btn_view_all_bills);
+
+        if (btnGenerateBill != null) btnGenerateBill.setVisibility(View.GONE);
+        if (btnViewAllBills != null) btnViewAllBills.setVisibility(View.GONE);
+
         return view;
     }
 
@@ -86,18 +94,10 @@ public class ViewBills extends Fragment {
             return;
         }
 
-        Uri pdfUri = FileProvider.getUriForFile(getContext(),
-                getContext().getPackageName() + ".fileprovider",
-                pdfFile);
-
+        Uri pdfUri = FileProvider.getUriForFile(getContext(), "com.example.warehub.fileprovider", pdfFile);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(pdfUri, "application/pdf");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivity(intent);
-        } else {
-            Toast.makeText(getContext(), "No app available to view PDF.", Toast.LENGTH_SHORT).show();
-        }
+        startActivity(intent);
     }
 }

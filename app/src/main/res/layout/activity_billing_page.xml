@@ -1,66 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:gravity="center">
 
-        <!-- Customer Name Input -->
-        <AutoCompleteTextView
-            android:id="@+id/customer_name_input"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Customer Name"
-            android:padding="12dp"
-            android:backgroundTint="#cccccc"
-            android:textColor="#000"
-            android:textColorHint="#888888" />
+            android:text="BILLING PAGE"
+            android:layout_gravity="center"
+            android:textSize="25sp"
+            android:layout_marginBottom="16dp"/>
 
 
+    </LinearLayout>
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Enter all details:" />
+
+    <AutoCompleteTextView
+        android:id="@+id/customer_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Customer Name"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:layout_marginBottom="16dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/product_list_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp" />
+            android:orientation="vertical" />
+    </ScrollView>
 
-        <!-- Add Product Button -->
+    <TextView
+        android:id="@+id/total_items_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Items: 0 | Total Amount: 0.0"
+        android:textSize="18sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp" />
+    <TextView
+        android:id="@+id/total_amount_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:text="Total Amount: 0.0" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
         <Button
             android:id="@+id/add_product_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:text="Add Product"
-            android:textColor="#ffffff"
-            android:backgroundTint="#0E1817"
-            android:layout_marginTop="12dp" />
+            android:layout_marginEnd="8dp" />
 
-        <!-- Total Amount Text -->
-        <TextView
-            android:id="@+id/total_amount_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total Amount: 0.0"
-            android:textColor="#000"
-            android:textSize="18sp"
-            android:layout_marginTop="16dp" />
-
-        <!-- Generate Bill Button -->
         <Button
             android:id="@+id/generate_bill_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Generate Bill"
-            android:textColor="#ffffff"
-            android:backgroundTint="#7E797B"
-            android:layout_marginTop="12dp" />
-
+            android:text="Generate Bill" />
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

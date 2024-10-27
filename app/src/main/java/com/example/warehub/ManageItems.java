@@ -125,7 +125,6 @@ public class ManageItems extends Fragment {
 
         // Create and show edit product dialog with rounded corners
         AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.RoundedAlertDialog)
-                .setTitle("Edit Product")
                 .setView(dialogView)
                 .setPositiveButton("Update", (dialog1, which) -> {
                     // Get updated product details

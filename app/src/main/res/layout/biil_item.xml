@@ -1,61 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:gravity="center_vertical"
-    android:background="?android:attr/colorBackground">
+    android:layout_margin="8dp"
 
-    <!-- Bill Customer Name -->
-    <TextView
-        android:id="@+id/bill_customer_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Customer Name"
-        android:textSize="16sp"
-        android:textColor="?android:attr/textColorPrimary" />
+    app:cardBackgroundColor="?android:attr/colorBackground">
 
-    <!-- Bill Number -->
-    <TextView
-        android:id="@+id/bill_number"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Bill No."
-        android:textSize="16sp"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
 
-    <!-- Bill Total Amount -->
-    <TextView
-        android:id="@+id/bill_total_amount"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="₹4000"
-        android:textSize="16sp"
-        android:textColor="?android:attr/colorAccent" />
+        <!-- Bill Customer Name -->
+        <TextView
+            android:id="@+id/bill_customer_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Customer Name"
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorPrimary" />
 
-    <!-- Download Button -->
-    <ImageView
-        android:id="@+id/download_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_save"
-        android:contentDescription="Download Bill"
-        android:padding="8dp"
-        app:tint="?android:attr/textColorSecondary" />
+        <!-- Bill Number -->
+        <TextView
+            android:id="@+id/bill_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Bill No."
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorPrimary" />
 
-    <!-- Delete Button -->
-    <ImageView
-        android:id="@+id/delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_delete"
-        android:contentDescription="Delete Bill"
-        android:padding="8dp"
-        app:tint="?android:attr/colorError" />
-</LinearLayout>
+        <!-- Bill Total Amount -->
+        <TextView
+            android:id="@+id/bill_total_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="₹4000"
+            android:textSize="16sp"
+            android:textColor="?android:attr/colorAccent" />
+
+        <!-- Download Button -->
+        <ImageView
+            android:id="@+id/download_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_save"
+            android:contentDescription="Download Bill"
+            android:padding="8dp"
+            app:tint="?android:attr/textColorSecondary" />
+
+        <!-- Delete Button -->
+        <ImageView
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_delete"
+            android:contentDescription="Delete Bill"
+            android:padding="8dp"
+            app:tint="?android:attr/colorError" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

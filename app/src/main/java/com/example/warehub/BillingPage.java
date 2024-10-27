@@ -232,15 +232,23 @@ public class BillingPage extends Fragment {
         totalAmount = 0.0;
         productList.clear();
 
+        // Validate each product row to ensure all dropdowns are selected
         for (int i = 0; i < productListContainer.getChildCount(); i++) {
             View productRow = productListContainer.getChildAt(i);
             Spinner productNameInput = productRow.findViewById(R.id.product_name_input);
             Spinner quantityInput = productRow.findViewById(R.id.quantity_input);
 
             if (productNameInput.getSelectedItemPosition() == 0 || quantityInput.getSelectedItemPosition() == 0) {
-                Toast.makeText(getActivity(), "Please select product and quantity", Toast.LENGTH_SHORT).show();
-                return;
+                Toast.makeText(getActivity(), "Please select both product and quantity for each item", Toast.LENGTH_SHORT).show();
+                return; // Exit if any dropdown is not selected
             }
+        }
+
+        // Process each row if validation is successful
+        for (int i = 0; i < productListContainer.getChildCount(); i++) {
+            View productRow = productListContainer.getChildAt(i);
+            Spinner productNameInput = productRow.findViewById(R.id.product_name_input);
+            Spinner quantityInput = productRow.findViewById(R.id.quantity_input);
 
             String productName = (String) productNameInput.getSelectedItem();
             int selectedQuantity = Integer.parseInt((String) quantityInput.getSelectedItem());
@@ -259,6 +267,7 @@ public class BillingPage extends Fragment {
         totalAmountTextView.setText("Total Amount: " + totalAmount);
         saveBillToDatabase(customerName);
     }
+
 
     private void saveBillToDatabase(String customerName) {
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());

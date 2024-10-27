@@ -6,4 +6,7 @@
     <color name="colorBackground">#121212</color>
     <color name="colorOnBackground">#FFFFFF</color>
 
+
+    <color name="custom_dark_grey">#908A8A</color>
+
 </resources>

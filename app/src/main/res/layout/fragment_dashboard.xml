@@ -76,8 +76,8 @@
             android:id="@+id/low_quantity_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:dividerHeight="8dp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:dividerHeight="8dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -95,13 +95,13 @@
 
         <!-- ListView for lBills generated today -->
         <ListView
-            android:id="@+id/bill_valuation"
+            android:id="@+id/today_bills_count_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:dividerHeight="8dp"
             android:layout_marginTop="8dp" />
         <ListView
-            android:id="@+id/No_of_bills"
+            android:id="@+id/today_bills_total_valuation_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:dividerHeight="8dp"

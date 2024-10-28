@@ -5,7 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import android.text.format.DateFormat;
+import java.util.Date;
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -285,6 +286,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return lowQuantityProducts;
     }
+
+    public int getTodayBillsCount() {
+        int count = 0;
+        String todayDate = DateFormat.format("yyyy-MM-dd", new Date()).toString();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_BILLS + " WHERE " + COLUMN_BILL_DATE + " = ?", new String[]{todayDate});
+
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
+    public double getTodayBillsTotalAmount() {
+        double totalAmount = 0.0;
+        String todayDate = DateFormat.format("yyyy-MM-dd", new Date()).toString();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_TOTAL_AMOUNT + ") FROM " + TABLE_BILLS + " WHERE " + COLUMN_BILL_DATE + " = ?", new String[]{todayDate});
+
+        if (cursor.moveToFirst()) {
+            totalAmount = cursor.getDouble(0);
+        }
+        cursor.close();
+        return totalAmount;
+    }
+
 
 
 }

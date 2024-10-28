@@ -152,12 +152,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Delete all data from the database
+    // Delete all data from the products and bills tables
     public void deleteAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_PRODUCTS);
-        db.execSQL("DELETE FROM " + TABLE_BILLS);
+        try {
+            db.beginTransaction();  // Begin transaction to ensure atomicity
+            db.delete(TABLE_PRODUCTS, null, null);
+            db.delete(TABLE_BILLS, null, null);
+            db.setTransactionSuccessful();  // Mark transaction as successful
+        } finally {
+            db.endTransaction();  // End the transaction
+        }
         db.close();
     }
+
 
 
     public Product getProductByName(String productName) {

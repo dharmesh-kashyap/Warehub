@@ -63,7 +63,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/rounded_bg"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,10 +77,11 @@
             android:id="@+id/low_quantity_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:dividerHeight="8dp" />
+            android:dividerHeight="8dp"
+            android:layout_marginTop="8dp" />
     </LinearLayout>
 
+    <!-- Bills Information -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -93,18 +95,23 @@
             android:text="Bills Generated Today"
             android:textSize="18sp" />
 
-        <!-- ListView for lBills generated today -->
-        <ListView
-            android:id="@+id/today_bills_count_text_view"
-            android:layout_width="match_parent"
+        <!-- Total Bill Count -->
+        <TextView
+            android:id="@+id/No_of_bills"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:dividerHeight="8dp"
+            android:text="Total Bills: 0"
+            android:textSize="18sp"
             android:layout_marginTop="8dp" />
-        <ListView
-            android:id="@+id/today_bills_total_valuation_text_view"
-            android:layout_width="match_parent"
+
+        <!-- Total Bill Valuation -->
+        <TextView
+            android:id="@+id/bill_valuation"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:dividerHeight="8dp"
+            android:text="Total Bill Valuation: Rs. 0.00"
+            android:textSize="18sp"
             android:layout_marginTop="8dp" />
     </LinearLayout>
+
 </LinearLayout>

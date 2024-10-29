@@ -14,10 +14,12 @@ import java.util.ArrayList;
 public class Dashboard extends Fragment {
 
     private TextView totalItemsTextView, totalValuationTextView;
+    private TextView totalBillCountTextView, totalBillValuationTextView;
     private ListView lowQuantityListView;
     private DatabaseHelper databaseHelper;
     private ProductAdapter lowQuantityAdapter;
     private ArrayList<Product> lowQuantityProducts;
+    private ArrayList<Bill> dailyBills;
 
     @Nullable
     @Override
@@ -28,6 +30,8 @@ public class Dashboard extends Fragment {
         totalItemsTextView = view.findViewById(R.id.total_items_text_view);
         totalValuationTextView = view.findViewById(R.id.total_valuation_text_view);
         lowQuantityListView = view.findViewById(R.id.low_quantity_list_view);
+        totalBillCountTextView = view.findViewById(R.id.No_of_bills);
+        totalBillValuationTextView = view.findViewById(R.id.bill_valuation);
 
         // Initialize DatabaseHelper instance
         databaseHelper = new DatabaseHelper(requireContext());
@@ -50,6 +54,9 @@ public class Dashboard extends Fragment {
 
         // Load low quantity items
         loadLowQuantityItems();
+
+        // Load bill information for the day
+        loadBillInformation();
     }
 
     // Method to calculate the total valuation from all products in the database
@@ -70,5 +77,22 @@ public class Dashboard extends Fragment {
         // Assuming you have a ProductAdapter for displaying products
         lowQuantityAdapter = new ProductAdapter(requireContext(), lowQuantityProducts, new ManageItems());
         lowQuantityListView.setAdapter(lowQuantityAdapter);
+    }
+
+    // Method to load today's bill information
+    private void loadBillInformation() {
+        // Retrieve today's bills from the database
+        dailyBills = databaseHelper.getBillsForToday();
+
+        // Calculate total number and valuation of bills
+        int totalBills = dailyBills.size();
+        double totalBillValuation = 0.0;
+        for (Bill bill : dailyBills) {
+            totalBillValuation += bill.getTotalAmount();
+        }
+
+        // Display the results
+        totalBillCountTextView.setText(String.valueOf(totalBills));
+        totalBillValuationTextView.setText(String.format("Rs. %.2f", totalBillValuation));
     }
 }

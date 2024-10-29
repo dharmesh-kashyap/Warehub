@@ -6,7 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.format.DateFormat;
-import java.util.Date;
+import java.util.Calendar;
+import java.util.ArrayList;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -153,20 +157,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Delete all data from the database
-    // Delete all data from the products and bills tables
     public void deleteAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        try {
-            db.beginTransaction();  // Begin transaction to ensure atomicity
-            db.delete(TABLE_PRODUCTS, null, null);
-            db.delete(TABLE_BILLS, null, null);
-            db.setTransactionSuccessful();  // Mark transaction as successful
-        } finally {
-            db.endTransaction();  // End the transaction
-        }
+        db.execSQL("DELETE FROM " + TABLE_PRODUCTS);
+        db.execSQL("DELETE FROM " + TABLE_BILLS);
         db.close();
     }
-
 
 
     public Product getProductByName(String productName) {
@@ -286,34 +282,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return lowQuantityProducts;
     }
-
-    public int getTodayBillsCount() {
-        int count = 0;
-        String todayDate = DateFormat.format("yyyy-MM-dd", new Date()).toString();
+    public ArrayList<Bill> getBillsForToday() {
+        ArrayList<Bill> billsForToday = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_BILLS + " WHERE " + COLUMN_BILL_DATE + " = ?", new String[]{todayDate});
+
+        // Get today's date in the required format (e.g., "yyyy-MM-dd")
+        String todayDate = DateFormat.format("yyyy-MM-dd", Calendar.getInstance().getTime()).toString();
+
+        // Query to select bills from today
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_BILLS + " WHERE " + COLUMN_BILL_DATE + " = ?", new String[]{todayDate});
 
         if (cursor.moveToFirst()) {
-            count = cursor.getInt(0);
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_BILL_ID));
+                String customerName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CUSTOMER_NAME));
+                double totalAmount = cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_TOTAL_AMOUNT));
+                String pdfPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PDF_PATH));
+                String billDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BILL_DATE));
+
+                billsForToday.add(new Bill(id, customerName, totalAmount, pdfPath, billDate));
+            } while (cursor.moveToNext());
         }
         cursor.close();
-        return count;
+        return billsForToday;
     }
-
-    public double getTodayBillsTotalAmount() {
-        double totalAmount = 0.0;
-        String todayDate = DateFormat.format("yyyy-MM-dd", new Date()).toString();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT SUM(" + COLUMN_TOTAL_AMOUNT + ") FROM " + TABLE_BILLS + " WHERE " + COLUMN_BILL_DATE + " = ?", new String[]{todayDate});
-
-        if (cursor.moveToFirst()) {
-            totalAmount = cursor.getDouble(0);
-        }
-        cursor.close();
-        return totalAmount;
-    }
-
-
 
 }
 
